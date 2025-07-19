@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Meal | Fight Hunger, Share Food</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #3A86FF;
+            --secondary: #2667CC;
+            --dark: #1A2E4D;
+            --light: #FFFFFF;
+            --accent: #E2F0FF;
+            --nav-bg: rgba(26, 46, 77, 0.98); /* Darker navbar background */
+            --nav-text: rgba(255, 255, 255, 0.9);
+            --nav-text-hover: white;
+            --nav-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            --footer-bg: #1A2E4D;
+            --footer-text: rgba(255, 255, 255, 0.9); /* Brighter footer text */
+            --footer-link: rgba(255, 255, 255, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            /* padding: 2rem 5rem; */
+            display: flex;
+            flex-direction: column;
+            max-width: 1600px;
+            margin: 0 auto;
+            flex-grow: 1;
+            margin-top: -1%;
+        }
+        
+        /* Enhanced Navigation Bar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--nav-bg);
+            box-shadow: var(--nav-shadow);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 0.8rem 5rem;
+            backdrop-filter: blur(10px);
+            background-color: rgba(26, 46, 77, 0.95);
+        }
+        
+        .logo {
+            font-size: 2rem; /* Larger logo */
+            font-weight: 700;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+        
+        .logo:hover {
+            transform: scale(1.03);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem; /* More space between nav items */
+            align-items: center;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--nav-text);
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 1.1rem; /* Larger nav text */
+            position: relative;
+            padding: 0.5rem 0;
+            letter-spacing: 0.5px;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        nav a:hover {
+            color: var(--nav-text-hover);
+        }
+        
+        .nav-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.8rem; /* Slightly larger button */
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem; /* Larger button text */
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(58, 134, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(58, 134, 255, 0.4);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.8rem; /* Larger mobile menu icon */
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-grow: 1;
+            width: 100%;
+            height: calc(100vh - 150px);
+            gap: 5rem;
+            margin-top: 100px; /* More space for fixed header */
+        }
+        
+        .hero-content {
+            width: 50%; /* Slightly wider content area */
+            padding-right: 3rem; /* More padding */
+            animation: slideInLeft 0.8s ease-out;
+        }
+        
+        .hero h1 {
+            font-size: 3rem; /* Larger heading */
+            line-height: 1.3;
+            margin-bottom: 1.8rem;
+            color: var(--dark);
+            animation: fadeIn 1s ease-out 0.2s both;
+        }
+        
+        .hero h1 span {
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.25rem; /* Slightly larger paragraph */
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            color: #555;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+        
+        .hero-image {
+            position: relative;
+            width: 45%; /* Adjusted width */
+            height: 65%; /* Reduced height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(58, 134, 255, 0.4),
+                        0 10px 20px -5px rgba(0, 0, 0, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            top: -20px;
+            right: -20px;
+            width: 120px;
+            height: 120px;
+            opacity: 0.8;
+            clip-path: circle(50% at 100% 0);
+            animation-delay: 0.5s;
+        }
+        
+        .shape-2 {
+            bottom: -20px;
+            left: -20px;
+            width: 120px;
+            height: 120px;
+            background-color: var(--primary);
+            opacity: 0.2;
+            clip-path: circle(50% at 0 100%);
+            animation-delay: 1s;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 3.5rem;
+            margin-top: 3rem; /* More space above stats */
+        }
+        
+        .stat-item {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .stat-item:nth-child(1) { animation-delay: 0.6s; }
+        .stat-item:nth-child(2) { animation-delay: 0.8s; }
+        .stat-item:nth-child(3) { animation-delay: 1s; }
+        
+        .stat-item h3 {
+            font-size: 2.8rem; /* Larger stats */
+            color: var(--primary);
+        }
+        
+        .stat-item p {
+            font-size: 1.1rem; /* Larger stat text */
+            color: #777;
+            font-weight: 500;
+        }
+        
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2.5rem; /* Larger button */
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1.15rem; /* Larger button text */
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(58, 134, 255, 0.3);
+            animation: pulse 2s infinite;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(58, 134, 255, 0.4);
+            animation: none;
+        }
+        
+        /* Enhanced Footer */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 5rem 5rem 2.5rem; /* More padding */
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Wider columns */
+            gap: 3.5rem; /* More gap between columns */
+            max-width: 1300px; /* Wider footer content */
+            margin: 0 auto;
+        }
+        
+        .footer-column {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .footer-logo {
+            font-size: 2rem; /* Larger logo */
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.8rem; /* More space below logo */
+        }
+        
+        .footer-logo span {
+            color: var(--primary);
+        }
+        
+        .footer-about {
+            margin-bottom: 2rem; /* More space */
+            line-height: 1.7; /* Better line height */
+            font-size: 1.05rem; /* Slightly larger text */
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1.2rem; /* More space between icons */
+        }
+        
+        .social-icon {
+            width: 42px; /* Slightly larger */
+            height: 42px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: white;
+            font-size: 1.1rem; /* Larger icons */
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-title {
+            font-size: 1.3rem; /* Larger title */
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.8rem; /* More space */
+            position: relative;
+            padding-bottom: 0.8rem; /* Thicker underline */
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px; /* Longer underline */
+            height: 3px; /* Thicker underline */
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; /* More space between links */
+        }
+        
+        .footer-links a {
+            color: var(--footer-link);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem; /* More space between icon and text */
+            font-size: 1.05rem; /* Larger link text */
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .footer-links i {
+            font-size: 0.9rem; /* Larger icons */
+            color: var(--primary);
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            gap: 1.2rem; /* More space between icon and text */
+            margin-bottom: 1.2rem; /* More space between items */
+            align-items: flex-start;
+        }
+        
+        .footer-contact-icon {
+            color: var(--primary);
+            font-size: 1.2rem; /* Larger icons */
+            margin-top: 0.3rem;
+        }
+        
+        .footer-contact-text {
+            line-height: 1.7;
+            font-size: 1.05rem; /* Slightly larger text */
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3.5rem; /* More space */
+            margin-top: 3rem; /* More space */
+            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Slightly more visible */
+        }
+        
+        .footer-legal {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem; /* More space between links */
+            margin-bottom: 1.5rem; /* More space */
+        }
+        
+        .footer-legal a {
+            color: var(--footer-link);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.05rem; /* Larger legal text */
+        }
+        
+        .footer-legal a:hover {
+            color: white;
+        }
+        
+        .footer-copyright {
+            font-size: 1rem; /* Larger copyright text */
+        }
+        
+        /* Newsletter Form */
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem; /* More space between elements */
+        }
+        
+        .newsletter-input {
+            padding: 0.9rem 1.2rem; /* Larger input */
+            border: none;
+            border-radius: 6px; /* Slightly rounder */
+            background-color: rgba(255, 255, 255, 0.15); /* More visible */
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem; /* Larger text */
+        }
+        
+        .newsletter-input::placeholder {
+            color: rgba(255, 255, 255, 0.7); /* More visible placeholder */
+        }
+        
+        .newsletter-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.9rem; /* Larger button */
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem; /* More space between icon and text */
+            font-size: 1.1rem; /* Larger button text */
+        }
+        
+        .newsletter-btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container, header {
+                padding: 2rem 3rem;
+            }
+            
+            header.scrolled {
+                padding: 0.8rem 3rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.6rem;
+            }
+            
+            .hero p {
+                font-size: 1.15rem;
+            }
+            
+            .stat-item h3 {
+                font-size: 2.4rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container, header {
+                padding: 2rem;
+            }
+            
+            header.scrolled {
+                padding: 0.8rem 2rem;
+            }
+            
+            .hero {
+                flex-direction: column;
+                height: auto;
+                gap: 2rem;
+                margin-top: 100px;
+                text-align: center;
+            }
+            
+            .hero-content {
+                width: 100%;
+                padding-right: 0;
+                text-align: center;
+            }
+            
+            .hero-image {
+                width: 80%;
+                height: 400px;
+                margin-top: 2rem;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 80px);
+                background-color: var(--nav-bg);
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+                padding: 2rem;
+                backdrop-filter: blur(10px);
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.8rem;
+            }
+            
+            .nav-button {
+                margin-top: 1rem;
+            }
+            
+            footer {
+                padding: 4rem 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .stats {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 2rem;
+            }
+            
+            .stat-item {
+                flex: 0 0 calc(50% - 2rem);
+                text-align: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container, header {
+                padding: 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 1.8rem;
+            }
+            
+            .stat-item {
+                flex: 0 0 100%;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            
+            .footer-legal {
+                flex-direction: column;
+                gap: 0.8rem;
+                align-items: center;
+            }
+            
+            .cta-button {
+                padding: 0.9rem 2rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation Bar -->
+    <header id="main-header">
+        <div class="logo">Share<span>Meal</span></div>
+        
+        <button class="mobile-menu-btn" id="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav id="main-nav">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#">contact us</a></li>
+                <li><a href="index.html" class="nav-button">
+                     Sign in
+                </a></li>
+                <li><a href="index.html" class="nav-button">
+                     Sign up
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Share a meal, <span>fight hunger</span> in your community</h1>
+                <p>Join thousands of people helping to reduce food waste and feed those in need. Your small contribution makes a big difference.</p>
+                
+                <a href="index.html" class="cta-button">Get Started</a>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <h3>10K+</h3>
+                        <p>Meals Shared</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>500+</h3>
+                        <p>Partners</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>100+</h3>
+                        <p>Communities</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <img src="welcomeimage2.jpg" alt="People sharing food">
+                <div class="floating-shape shape-1"></div>
+                <div class="floating-shape shape-2"></div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Enhanced Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <div class="footer-logo">Share<span>Meal</span></div>
+                <p class="footer-about">
+                    We connect surplus food with people in need, reducing waste and fighting hunger in communities across the country.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                     <li><a href="#"><i class="fas fa-chevron-right"></i> contact us</a></li>
+                    <!-- <li><a href="#"><i class="fas fa-chevron-right"></i> Get Involved</a></li> --> 
+                </ul>
+            </div>
+            
+            <!-- <div class="footer-column">
+                <h3 class="footer-title">Our Impact</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Annual Reports</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Community Partners</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Volunteer</a></li>
+                </ul>
+            </div>
+             -->
+            <div class="footer-column">
+                <h3 class="footer-title">Contact Us</h3>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt footer-contact-icon"></i>
+                    <div class="footer-contact-text">
+                        123 Charity Street, Foodville, HV 12345
+                    </div>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone-alt footer-contact-icon"></i>
+                    <div class="footer-contact-text">
+                        (123) 456-7890
+                    </div>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope footer-contact-icon"></i>
+                    <div class="footer-contact-text">
+                        info@sharemeal.org
+                    </div>
+                </div>
+                
+                <!-- <h3 class="footer-title" style="margin-top: 1.8rem;">Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Your email address">
+                    <button type="submit" class="newsletter-btn">
+                        <i class="fas fa-paper-plane"></i> Subscribe
+                    </button>
+                </form> -->
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2025 ShareMeal. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Header scroll effect
+        const header = document.getElementById('main-header');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
