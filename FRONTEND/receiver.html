@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receiver Dashboard | FoodShare Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* New Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, #0d0d4e 0%, #04b3ed 100%);
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            /* align-items: center; */
+            
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-left: -20%;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-right: -20%;
+
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0d0d4e;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(13, 13, 78, 0.9) 0%, rgba(4, 179, 237, 0.9) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 25px;
+            opacity: 0.9;
+        }
+
+        /* Location Info */
+        .location-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 5px solid #04b3ed;
+        }
+
+        .location-info i {
+            color: #04b3ed;
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+
+        .location-text {
+            flex-grow: 1;
+            font-size: 1.1rem;
+        }
+
+        .change-location {
+            color: #04b3ed;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 6px;
+            background-color: rgba(4, 179, 237, 0.1);
+            transition: all 0.3s;
+        }
+
+        .change-location:hover {
+            background-color: rgba(4, 179, 237, 0.2);
+        }
+
+        /* Donations List */
+        .donations-list {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .donations-list h2 {
+            color: #0d0d4e;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn i {
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #04b3ed 0%, #0d0d4e 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(4, 179, 237, 0.3);
+        }
+
+        .donation-item {
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            transition: all 0.3s;
+        }
+
+        .donation-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .donation-details h3 {
+            color: #0d0d4e;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .donation-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .donation-meta i {
+            margin-right: 5px;
+            color: #04b3ed;
+        }
+
+        .donation-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .donor-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .donor-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0d0d4e 0%, #04b3ed 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .donation-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .donation-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #04b3ed 0%, #0d0d4e 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(4, 179, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(4, 179, 237, 0.4);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            color: #555;
+        }
+
+        .btn-outline:hover {
+            background-color: #f9f9f9;
+        }
+
+        .no-donations {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-donations i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .no-donations p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .request-form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: none;
+            border-left: 4px solid #04b3ed;
+        }
+
+        .request-form textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .request-form textarea:focus {
+            border-color: #04b3ed;
+            box-shadow: 0 0 0 3px rgba(4, 179, 237, 0.2);
+            outline: none;
+        }
+
+        .request-form .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .distance-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background-color: #e3f7e8;
+            color: #2e7d32;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .special-instructions {
+            padding: 15px;
+            background-color: #fff8e1;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .special-instructions p {
+            margin-bottom: 0;
+        }
+
+        .special-instructions strong {
+            color: #0d0d4e;
+        }
+
+        /* My Requests Section */
+        .my-requests {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .my-requests h2 {
+            color: #0d0d4e;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .request-item {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .request-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-pending {
+            background-color: #fff8e1;
+            color: #ff8f00;
+        }
+
+        .status-accepted {
+            background-color: #e3f7e8;
+            color: #2e7d32;
+        }
+
+        .status-declined {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .claim-btn {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            color: white;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid #04b3ed;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #04b3ed;
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0d0d4e;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* History Section */
+        .history-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .history-section h2 {
+            color: #0d0d4e;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-item {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .history-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-claimed {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #0d0d4e;
+            border-bottom: 3px solid #04b3ed;
+        }
+
+        .tab:hover:not(.active) {
+            color: #04b3ed;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 30px 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .filter-controls {
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .donation-item {
+                padding: 20px;
+            }
+
+            .donation-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .request-form .btn-group {
+                flex-direction: column;
+            }
+        }
+        .status-declined {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .request-again-btn {
+            background-color: #f5f5f5;
+            color: #0d0d4e;
+            border: 1px solid #ddd;
+        }
+
+        .request-again-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- New Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <span>FoodShare Network</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">R</div>
+                <div>
+                    <div id="usernameDisplay">Receiver</div>
+                    <a href="#" id="logoutBtn" style="color: white; font-size: 0.9rem;">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1><i class="fas fa-hands-helping"></i> Find Food Donations</h1>
+            <p>Discover surplus food from generous donors in your community and help reduce food waste while feeding those in need.</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="stat-number" id="availableDonations">0</div>
+                <div class="stat-label">Available Donations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-number" id="yourRequests">0</div>
+                <div class="stat-label">Your Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" id="activeDonors">0</div>
+                <div class="stat-label">Active Donors</div>
+            </div>
+        </div>
+
+        <!-- Location Info -->
+        <div class="location-info">
+            <i class="fas fa-map-marker-alt"></i>
+            <div class="location-text" id="currentLocation">Location not set</div>
+            <div class="change-location" id="changeLocationBtn">
+                <i class="fas fa-edit"></i> Change Location
+            </div>
+        </div>
+
+        <!-- Donations List -->
+        <div class="donations-list">
+            <h2><i class="fas fa-utensils"></i> Available Donations</h2>
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-list"></i> All
+                </button>
+                <!-- <button class="filter-btn" data-filter="nearby">
+                    <i class="fas fa-location-arrow"></i> Near Me
+                </button> -->
+                <button class="filter-btn" data-filter="vegetarian">
+                    <i class="fas fa-leaf"></i> Vegetarian
+                </button>
+                <button class="filter-btn" data-filter="non-vegetarian">
+                    <i class="fas fa-drumstick-bite"></i> Non-Veg
+                </button>
+                <button class="filter-btn" id="viewHistoryBtn">
+                    <i class="fas fa-history"></i> History
+                </button>
+            </div>
+            <div id="donationsContainer">
+                <div class="no-donations">
+                    <i class="fas fa-utensils"></i>
+                    <p>No food donations available at the moment.</p>
+                    <p>Please check back later or try changing your location.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Requests Section -->
+        <div class="my-requests">
+            <h2><i class="fas fa-history"></i> My Requests</h2>
+            <div id="myRequestsContainer">
+                <div class="no-donations">
+                    <i class="fas fa-clock"></i>
+                    <p>You haven't made any requests yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section" id="historySection">
+            <h2><i class="fas fa-history"></i> Claimed Donations</h2>
+            <div id="historyContainer">
+                <div class="no-donations">
+                    <i class="fas fa-utensils"></i>
+                    <p>No claimed donations found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentDonationUser'));
+            if (!currentUser || currentUser.role !== 'receiver') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Initialize user info
+            document.getElementById('usernameDisplay').textContent = currentUser.username;
+            document.getElementById('userAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+
+            // Load user location
+            const userLocation = JSON.parse(localStorage.getItem(`userLocation_${currentUser.username}`));
+            if (userLocation) {
+                document.getElementById('currentLocation').textContent = userLocation.display_name || 'Your location';
+            }
+
+            // Change location button
+            document.getElementById('changeLocationBtn').addEventListener('click', function() {
+                window.location.href = 'location.html';
+            });
+
+            // View History button
+            document.getElementById('viewHistoryBtn').addEventListener('click', function() {
+                document.getElementById('donationsContainer').style.display = 'none';
+                document.getElementById('historySection').style.display = 'block';
+                loadHistory();
+                
+                // Update filter buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    if (btn.id !== 'viewHistoryBtn') {
+                        btn.classList.remove('active');
+                    }
+                });
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('currentDonationUser');
+                window.location.href = 'index.html';
+            });
+
+            // Initialize donations if not exists
+            if (!localStorage.getItem('foodDonations')) {
+                localStorage.setItem('foodDonations', JSON.stringify([]));
+            }
+
+            // Load donations and stats
+            loadDonations('all');
+            loadMyRequests();
+            loadStats();
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.id !== 'viewHistoryBtn') {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        document.getElementById('donationsContainer').style.display = 'block';
+                        document.getElementById('historySection').style.display = 'none';
+                        loadDonations(this.getAttribute('data-filter'));
+                    });
+                }
+            });
+
+            function loadDonations(filter) {
+                const donations = JSON.parse(localStorage.getItem('foodDonations'));
+                const availableDonations = donations.filter(d => d.status === 'available');
+                const container = document.getElementById('donationsContainer');
+
+                if (availableDonations.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-donations">
+                            <i class="fas fa-utensils"></i>
+                            <p>No food donations available at the moment.</p>
+                            <p>Please check back later or try changing your location.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+                availableDonations.forEach(donation => {
+                    // Calculate distance if both locations have coordinates
+                    let distance = null;
+                    if (userLocation?.lat && userLocation?.lon && donation.location?.lat && donation.location?.lon) {
+                        distance = calculateDistance(
+                            userLocation.lat, userLocation.lon,
+                            donation.location.lat, donation.location.lon
+                        );
+                    }
+
+                    // Check food type for filtering (strict match)
+                    const foodTypeLower = donation.foodType.trim().toLowerCase();
+                    const isVegetarian = foodTypeLower === 'vegetarian' || foodTypeLower.startsWith('vegetarian ');
+                    const isNonVegetarian = foodTypeLower === 'non-vegetarian' || foodTypeLower.startsWith('non-vegetarian ');
+                    
+                    // Apply filters
+                    if (filter === 'nearby' && (!distance || distance > 10)) return;
+                    if (filter === 'vegetarian' && !isVegetarian) return;
+                    if (filter === 'non-vegetarian' && !isNonVegetarian) return;
+
+                    const donationElement = document.createElement('div');
+                    donationElement.className = 'donation-item';
+                    donationElement.innerHTML = `
+                        <div class="donation-details">
+                            <h3><i class="fas fa-${isVegetarian ? 'leaf' : 'drumstick-bite'}"></i> ${donation.foodType} (${donation.quantity})</h3>
+                            <div class="donation-meta">
+                                <span><i class="far fa-clock"></i> ${new Date(donation.createdAt).toLocaleString()}</span>
+                                <span><i class="fas fa-stopwatch"></i> Best before: ${new Date(donation.bestBefore).toLocaleString()}</span>
+                                ${distance ? `<span class="distance-badge"><i class="fas fa-map-marker-alt"></i> ${distance.toFixed(1)} km away</span>` : ''}
+                            </div>
+                            <div class="donation-description">
+                                <p>${donation.foodDescription}</p>
+                            </div>
+                            ${donation.specialInstructions ? `
+                                <div class="special-instructions">
+                                    <p><strong>Special Instructions:</strong> ${donation.specialInstructions}</p>
+                                </div>
+                            ` : ''}
+                            <div class="donor-info">
+                                <div class="donor-avatar">${donation.donor ? donation.donor.charAt(0).toUpperCase() : '?'}</div>
+                                <div>Donated by ${donation.donor}</div>
+                            </div>
+                            <div class="donation-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${donation.location?.display_name || 'Location not specified'}</span>
+                            </div>
+                        </div>
+                        <div class="donation-actions">
+                            <button class="btn btn-primary request-btn" data-id="${donation.id}">
+                                <i class="fas fa-hand-holding-heart"></i> Request Food
+                            </button>
+                            <button class="btn btn-outline view-details-btn" data-id="${donation.id}">
+                                <i class="fas fa-info-circle"></i> Details
+                            </button>
+                        </div>
+                        <div class="request-form" id="requestForm-${donation.id}">
+                            <textarea placeholder="Add a message for the donor (e.g., preferred pickup time, special requests)" id="requestMessage-${donation.id}"></textarea>
+                            <div class="btn-group">
+                                <button class="btn btn-primary confirm-request-btn" data-id="${donation.id}">
+                                    <i class="fas fa-check"></i> Confirm Request
+                                </button>
+                                <button class="btn btn-outline cancel-request-btn" data-id="${donation.id}">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(donationElement);
+                });
+
+                // Add event listeners
+                document.querySelectorAll('.request-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const donationId = this.getAttribute('data-id');
+                        document.getElementById(`requestForm-${donationId}`).style.display = 'block';
+                        this.style.display = 'none';
+                    });
+                });
+
+                document.querySelectorAll('.cancel-request-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const donationId = this.getAttribute('data-id');
+                        document.getElementById(`requestForm-${donationId}`).style.display = 'none';
+                        document.querySelector(`.request-btn[data-id="${donationId}"]`).style.display = 'inline-flex';
+                    });
+                });
+
+                document.querySelectorAll('.confirm-request-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const donationId = this.getAttribute('data-id');
+                        const message = document.getElementById(`requestMessage-${donationId}`).value;
+                        
+                        const donations = JSON.parse(localStorage.getItem('foodDonations'));
+                        const donationIndex = donations.findIndex(d => d.id === donationId);
+                        
+                        if (donationIndex !== -1) {
+                            donations[donationIndex].status = 'requested';
+                            donations[donationIndex].requests = [{
+                                receiver: currentUser.username,
+                                message,
+                                status: 'pending',
+                                requestedAt: new Date().toISOString(),
+                                receiverLocation: userLocation
+                            }];
+                            
+                            localStorage.setItem('foodDonations', JSON.stringify(donations));
+                            alert('Request sent successfully! The donor will review your request.');
+                            loadDonations(filter);
+                            loadMyRequests();
+                            loadStats();
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.view-details-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const donationId = this.getAttribute('data-id');
+                        const donations = JSON.parse(localStorage.getItem('foodDonations'));
+                        const donation = donations.find(d => d.id === donationId);
+                        
+                        if (donation) {
+                            alert(`Food Details:\n\nType: ${donation.foodType}\nQuantity: ${donation.quantity}\nDescription: ${donation.foodDescription}\nBest Before: ${new Date(donation.bestBefore).toLocaleString()}\nPickup Time: ${donation.preferredPickup || 'Not specified'}\nSpecial Instructions: ${donation.specialInstructions || 'None'}`);
+                        }
+                    });
+                });
+            }
+
+            function loadMyRequests() {
+                const donations = JSON.parse(localStorage.getItem('foodDonations')) || [];
+                const myRequests = donations.filter(d => 
+                    d.requests && 
+                    d.requests.some(r => r.receiver === currentUser.username) &&
+                    d.status !== 'claimed' // Exclude claimed donations
+                );
+                
+                const container = document.getElementById('myRequestsContainer');
+                
+                if (myRequests.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-donations">
+                            <i class="fas fa-clock"></i>
+                            <p>You haven't made any requests yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = '';
+                myRequests.forEach(donation => {
+                    const request = donation.requests.find(r => r.receiver === currentUser.username);
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    if (request.status === 'pending') {
+                        statusClass = 'status-pending';
+                        statusText = 'Pending';
+                    } else if (request.status === 'accepted') {
+                        statusClass = 'status-accepted';
+                        statusText = 'Accepted';
+                    } else if (request.status === 'declined') {
+                        statusClass = 'status-declined';
+                        statusText = 'Declined';
+                    }
+                    
+                    const requestElement = document.createElement('div');
+                    requestElement.className = 'request-item';
+                    
+                    requestElement.innerHTML = `
+                        <div class="request-status ${statusClass}">${statusText}</div>
+                        <h3>${donation.foodType} (${donation.quantity})</h3>
+                        <p>Donor: ${donation.donor}</p>
+                        <p>Requested: ${new Date(request.requestedAt).toLocaleString()}</p>
+                        ${request.message ? `<p>Your message: ${request.message}</p>` : ''}
+                        ${donation.status === 'accepted' ? `
+                            <div class="donation-actions">
+                                <button class="btn btn-primary claim-btn" data-id="${donation.id}">
+                                    <i class="fas fa-check-circle"></i> Mark as Claimed
+                                </button>
+                            </div>
+                        ` : ''}
+                        ${request.status === 'declined' ? `
+                            <div class="donation-actions">
+                                <button class="btn btn-outline request-again-btn" data-id="${donation.id}">
+                                    <i class="fas fa-redo"></i> Request Again
+                                </button>
+                            </div>
+                        ` : ''}
+                    `;
+                    
+                    container.appendChild(requestElement);
+                });
+                
+                // Add event listeners for claim buttons
+                document.querySelectorAll('.claim-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const donationId = this.getAttribute('data-id');
+                        markAsClaimed(donationId);
+                    });
+                });
+                
+                // Add event listeners for request again buttons
+                document.querySelectorAll('.request-again-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const donationId = this.getAttribute('data-id');
+                        resetRequest(donationId);
+                    });
+                });
+            }
+            
+            function resetRequest(donationId) {
+                const donations = JSON.parse(localStorage.getItem('foodDonations'));
+                const donationIndex = donations.findIndex(d => d.id === donationId);
+                
+                if (donationIndex !== -1) {
+                    donations[donationIndex].status = 'available';
+                    donations[donationIndex].requests = donations[donationIndex].requests.filter(
+                        r => r.receiver !== currentUser.username
+                    );
+                    
+                    localStorage.setItem('foodDonations', JSON.stringify(donations));
+                    loadMyRequests();
+                    loadDonations('all');
+                    loadStats();
+                }
+            }
+            
+            function loadHistory() {
+                const donations = JSON.parse(localStorage.getItem('foodDonations')) || [];
+                const claimedDonations = donations.filter(d => 
+                    d.requests && 
+                    d.requests.some(r => r.receiver === currentUser.username) &&
+                    d.status === 'claimed'
+                );
+                
+                const container = document.getElementById('historyContainer');
+                
+                if (claimedDonations.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-donations">
+                            <i class="fas fa-utensils"></i>
+                            <p>No claimed donations found.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = '';
+                claimedDonations.forEach(donation => {
+                    const request = donation.requests.find(r => r.receiver === currentUser.username);
+                    
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    
+                    historyItem.innerHTML = `
+                        <div class="history-status status-claimed">Claimed</div>
+                        <h3>${donation.foodType} (${donation.quantity})</h3>
+                        <p>Donor: ${donation.donor}</p>
+                        <p>Claimed on: ${new Date(donation.updatedAt || donation.createdAt).toLocaleString()}</p>
+                        <p>Location: ${donation.location?.display_name || 'Not specified'}</p>
+                        ${request.message ? `<p>Your message: ${request.message}</p>` : ''}
+                    `;
+                    
+                    container.appendChild(historyItem);
+                });
+            }
+            
+            function markAsClaimed(donationId) {
+                if (!confirm('Have you successfully claimed this food donation?')) {
+                    return;
+                }
+                
+                const donations = JSON.parse(localStorage.getItem('foodDonations'));
+                const donationIndex = donations.findIndex(d => d.id === donationId);
+                
+                if (donationIndex !== -1) {
+                    donations[donationIndex].status = 'claimed';
+                    if (donations[donationIndex].requests && donations[donationIndex].requests.length > 0) {
+                        donations[donationIndex].requests[0].status = 'claimed';
+                    }
+                    // Add claim timestamp
+                    donations[donationIndex].updatedAt = new Date().toISOString();
+                    localStorage.setItem('foodDonations', JSON.stringify(donations));
+                    alert('Thank you for confirming! The donation has been marked as claimed.');
+                    loadDonations('all');
+                    loadMyRequests();
+                    loadHistory();
+                    loadStats();
+                }
+            }
+
+            function loadStats() {
+                const donations = JSON.parse(localStorage.getItem('foodDonations')) || [];
+                const availableDonations = donations.filter(d => d.status === 'available').length;
+                const userRequests = donations.filter(d => 
+                    d.requests && d.requests.some(r => r.receiver === currentUser.username)
+                ).length;
+                
+                // Count unique donors
+                const donors = [...new Set(donations.map(d => d.donor))].length;
+                
+                document.getElementById('availableDonations').textContent = availableDonations;
+                document.getElementById('yourRequests').textContent = userRequests;
+                document.getElementById('activeDonors').textContent = donors;
+            }
+
+            // Calculate distance between two coordinates in km
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371; // Earth radius in km
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = 
+                    Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return R * c;
+            }
+        });
+    </script>
+</body>
+</html>
